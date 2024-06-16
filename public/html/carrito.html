@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        /* Estilos adicionales personalizados */
+        body {
+            padding: 20px;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+        .total {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4">Carrito de Compras</h1>
+        <div id="carrito" class="mt-4">
+            <!-- Contenido del carrito -->
+            <div id="carrito-detalle">
+                <!-- Aquí se mostrarán los productos seleccionados -->
+            </div>
+            <hr>
+            <!-- Total del carrito -->
+            <div class="text-end total" id="total-carrito">
+                Total: $0.00
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS y dependencias opcionales -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Función para agregar un producto al carrito
+            function agregarProducto(nombre, precio) {
+                const carritoDetalle = document.getElementById("carrito-detalle");
+
+                // Crear la tarjeta del producto
+                const productoCard = `
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${nombre}</h5>
+                            <p class="card-text">Precio: $${precio.toFixed(2)}</p>
+                            <button class="btn btn-danger" onclick="eliminarProducto(this)">Eliminar</button>
+                        </div>
+                    </div>
+                `;
+
+                // Agregar la tarjeta al carrito
+                carritoDetalle.innerHTML += productoCard;
+
+                // Calcular y actualizar el total del carrito
+                calcularTotalCarrito();
+            }
+
+            // Función para eliminar un producto del carrito
+            function eliminarProducto(btn) {
+                btn.closest('.card').remove();
+                calcularTotalCarrito();
+            }
+
+            // Función para calcular y actualizar el total del carrito
+            function calcularTotalCarrito() {
+                const productos = document.querySelectorAll("#carrito-detalle .card");
+                let total = 0;
+
+                productos.forEach((producto) => {
+                    const precioTexto = producto.querySelector('.card-text').textContent;
+                    const precio = parseFloat(precioTexto.replace('Precio: $', ''));
+                    total += precio;
+                });
+
+                // Actualizar el total en la interfaz
+                document.getElementById("total-carrito").textContent = `Total: $${total.toFixed(2)}`;
+            }
+
+            // Ejemplo de cómo agregar productos (simulado)
+            agregarProducto("Producto 1", 10.99);
+            agregarProducto("Producto 2", 24.50);
+        });
+    </script>
+</body>
+</html>

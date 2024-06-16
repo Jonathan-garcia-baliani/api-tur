@@ -1,0 +1,20 @@
+{
+  "name": "proyecto-node",
+  "version": "1.0.0",
+  "description": "Proyecto de viajes con Node.js",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "viajes",
+    "node",
+    "express"
+  ],
+  "author": "Tu Nombre",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "node-sass-middleware": "^1.1.0"
+  }
+}

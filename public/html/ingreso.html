@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingreso de Productos</title>
+    <link rel="stylesheet" href="../css/estilo.css">
+</head>
+<body>
+    <header>
+        <a href="#">
+            <img class="logo" src="../img/logo.png" class="img-fluid" alt="logo de coder viajes" />
+        </a>
+        <a href="http://localhost:3000/carrito" class="btn btn-outline-primary">
+            <i class="bi bi-cart"></i> Ver Carrito
+        </a>
+
+        <button id="abrir" class="abrir-menu"><i class="bi bi-list"></i></button>
+        <nav class="nav" id="nav">
+            <button class="cerrar-menu" id="cerrar"><i class="bi bi-x"></i></button>
+            <ul class="nav-list">
+                <li class="item"><a href="../index.html"> Home</a></li>
+                <li class="item"><a href="destinos.html"> Destinos</a></li>
+                <li class="item">
+                    <a href="conoce-los-destinos.html"> conoce-los-destinos</a>
+                </li>
+                <li class="item"><a href="sucursales.html"> Sucursales</a></li>
+                <li class="item"><a href="contacto.html"> Contacto</a></li>
+                <li class="btn"><a href="login.html"> login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <h1>Bienvenido Jonathan</h1>
+    <h2>Le brindamos esta calculadora para poder financiar sus viajes</h2>
+
+    <div id="calculadora">
+        <label for="monto">Monto total del viaje ($): </label>
+        <input type="number" id="monto" name="monto" min="0" required /><br /><br />
+
+        <label for="plazo">Plazo de financiación (meses): </label>
+        <input type="number" id="plazo" name="plazo" min="1" max="60" required /><br /><br />
+
+        <label for="tasa">Tasa de interés anual (%): </label>
+        <input type="number" id="tasa" name="tasa" min="0" max="100" step="0.1" required /><br /><br />
+
+        <button onclick="calcularCuota()">Calcular Cuota Mensual</button>
+
+        <h3 id="resultado"></h3>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row" id="destinosContainer">
+            <!-- Aquí se insertarán dinámicamente las tarjetas de los destinos -->
+        </div>
+    </div>
+
+    <div id="carrito">
+        <h3>Carrito de compras</h3>
+        <div id="carrito-detalle"></div>
+        <div id="total-carrito"></div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const destinosContainer = document.getElementById("destinosContainer");
+
+            // Datos de los destinos simulados
+            const destinos = [
+                { nombre: "Francia", img: "francia.jpg", precios: ["1500", "1800"] },
+                { nombre: "Italia", img: "italia.jpg", precios: ["1800", "2000"] },
+                { nombre: "Japón", img: "japon.jpg", precios: ["2200", "2500"] },
+                { nombre: "Roma", img: "roma.jpg", precios: ["2000", "2300"] },
+                { nombre: "Grecia", img: "grecia.jpg", precios: ["1700", "1900"] },
+                { nombre: "Egipto", img: "egipto.jpg", precios: ["1600", "2000"] },
+                { nombre: "China", img: "china.jpg", precios: ["1900", "2300"] },
+                { nombre: "Australia", img: "australia.jpg", precios: ["2500", "2800"] },
+                { nombre: "Canadá", img: "canada.jpg", precios: ["2400", "2700"] },
+                { nombre: "Sudáfrica", img: "sudafrica.jpg", precios: ["1900", "2200"] }
+            ];
+
+            // Generar tarjetas de destinos
+            destinos.forEach((destino) => {
+                const card = `
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <img src="../img/${destino.img}" class="card-img-top" alt="${destino.nombre}">
+                            <div class="card-body">
+                                <h5 class="card-title">${destino.nombre}</h5>
+                                <form id="form-${destino.nombre.toLowerCase()}">
+                                    <select name="precio" id="precio-${destino.nombre.toLowerCase()}">
+                                        <option value="${destino.precios[0]}">Paquete básico - $${destino.precios[0]}</option>
+                                        <option value="${destino.precios[1]}">Paquete premium - $${destino.precios[1]}</option>
+                                    </select>
+                                    <button type="button" class="btn btn-success" onclick="agregarAlCarrito('${destino.nombre}', document.getElementById('precio-${destino.nombre.toLowerCase()}').value)">
+                                        Agregar al carrito <i class="bi bi-cart-plus"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                destinosContainer.innerHTML += card;
+            });
+        });
+
+        let carrito = [];
+
+        function agregarAlCarrito(destino, precio) {
+            carrito.push({ destino, precio });
+            actualizarCarrito();
+        }
+
+        function actualizarCarrito() {
+            let total = 0;
+            let detalleCarrito = "";
+            carrito.forEach((item) => {
+                detalleCarrito += `${item.destino}: $${item.precio}<br>`;
+                total += parseInt(item.precio);
+            });
+            document.getElementById("carrito-detalle").innerHTML = detalleCarrito;
+            document.getElementById("total-carrito").innerHTML = `Total: $${total}`;
+        }
+
+        function calcularCuota() {
+            // Lógica para calcular la cuota mensual
+            const monto = document.getElementById("monto").value;
+            const plazo = document.getElementById("plazo").value;
+            const tasa = document.getElementById("tasa").value;
+
+            // Ejemplo básico: calculando cuota mensual
+            const cuota = (monto * (1 + tasa / 100)) / plazo;
+            document.getElementById("resultado").innerHTML = `Cuota mensual: $${cuota.toFixed(2)}`;
+        }
+    </script>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
